@@ -262,8 +262,10 @@ public class SharedTrainingMaster extends BaseTrainingMaster<SharedTrainingResul
 
         SharedTrainingConfiguration configuration = SharedTrainingConfiguration.builder()
                 .thresholdAlgorithm(thresholdAlgorithm)
+                .residualPostProcessor(residualPostProcessor)
                 .voidConfiguration(voidConfiguration)
-                .debugLongerIterations(debugLongerIterations).numberOfWorkersPerNode(numWorkersPerNode)
+                .debugLongerIterations(debugLongerIterations)
+                .numberOfWorkersPerNode(numWorkersPerNode)
                 .encodingDebugMode(encodingDebugMode).build();
 
         if (collectTrainingStats)
@@ -470,13 +472,6 @@ public class SharedTrainingMaster extends BaseTrainingMaster<SharedTrainingResul
                         voidConfiguration.getUnicastControllerPort());
         voidConfiguration.setShardAddresses(voidConfiguration.getControllerAddress());
         voidConfiguration.setNumberOfShards(1);
-
-        {
-            log.info("Initializing messages lol");
-            val hreq = new HandshakeRequest();
-            val hres = new HandshakeResponse();
-            val gm = new GradientsUpdateMessage();
-        }
 
         if (network != null)
             network.getNetwork().init();
