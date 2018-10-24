@@ -37,6 +37,7 @@ import org.deeplearning4j.optimize.listeners.SharedGradient;
 import org.deeplearning4j.optimize.solvers.accumulation.EncodedGradientsAccumulator;
 import org.deeplearning4j.optimize.solvers.accumulation.GradientsAccumulator;
 import org.deeplearning4j.optimize.solvers.accumulation.Registerable;
+import org.deeplearning4j.optimize.solvers.accumulation.encoding.ResidualPostProcessor;
 import org.deeplearning4j.optimize.solvers.accumulation.encoding.ThresholdAlgorithm;
 import org.deeplearning4j.parallelism.factory.DefaultTrainerContext;
 import org.deeplearning4j.parallelism.factory.SymmetricTrainerContext;
@@ -686,6 +687,7 @@ public class ParallelWrapper implements AutoCloseable {
         protected Supplier<INDArray> modelParamsSupplier;
         protected Supplier<INDArray> updaterParamsSupplier;
         protected ThresholdAlgorithm thresholdAlgorithm;
+        protected ResidualPostProcessor residualPostProcessor;
 
         protected GradientsAccumulator accumulator;
 
@@ -865,6 +867,11 @@ public class ParallelWrapper implements AutoCloseable {
             return this;
         }
 
+        public Builder residualPostProcessor(ResidualPostProcessor residualPostProcessor){
+            this.residualPostProcessor = residualPostProcessor;
+            return this;
+        }
+
         /**
          * This method returns ParallelWrapper instance
          *
@@ -894,7 +901,7 @@ public class ParallelWrapper implements AutoCloseable {
                     this.trainerContext = new SymmetricTrainerContext();
                     if (this.accumulator == null) {
                         log.info("Creating new GradientsAccumulator instance with threshold of [5e-4");
-                        this.accumulator = new EncodedGradientsAccumulator(workers, thresholdAlgorithm, false);
+                        this.accumulator = new EncodedGradientsAccumulator(workers, thresholdAlgorithm, residualPostProcessor,  false);
                     }
                 }
                     break;

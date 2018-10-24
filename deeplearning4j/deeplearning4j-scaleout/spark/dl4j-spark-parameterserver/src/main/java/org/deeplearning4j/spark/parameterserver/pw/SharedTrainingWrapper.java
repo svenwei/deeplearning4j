@@ -402,6 +402,7 @@ public class SharedTrainingWrapper {
                                     .modelParamsSupplier(modelParamsSupplier)
                                     .updaterParamsSupplier(updateParamsSupplier)
                                     .thresholdAlgorithm(trainingConfiguration.getThresholdAlgorithm())
+                                    .residualPostProcessor(trainingConfiguration.getResidualPostProcessor())
                                     .build();
                     wrapper.setExceptionEncountered(exceptionEncountered);
                 } else {
