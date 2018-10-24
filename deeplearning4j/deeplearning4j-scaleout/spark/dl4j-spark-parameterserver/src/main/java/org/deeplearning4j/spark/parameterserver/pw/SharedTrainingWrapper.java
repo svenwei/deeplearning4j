@@ -481,6 +481,7 @@ public class SharedTrainingWrapper {
 
 
             // conditionally shutdown & reset ParallelWrapper
+            EncodedGradientsAccumulator accum = (EncodedGradientsAccumulator) wrapper.getGradientsAccumulator();        //Store before possible shutdown for below
             if (trainingConfiguration.isEpochReset()) {
                 wrapper.shutdown();
                 wrapper = null;
@@ -510,7 +511,6 @@ public class SharedTrainingWrapper {
 
             //Get threshold algorithm instances from each thread, and average them - they may have state that needs
             // to be averaged and persisted, to avoid starting threshold adaption from scratch
-            EncodedGradientsAccumulator accum = (EncodedGradientsAccumulator) wrapper.getGradientsAccumulator();
             EncodingHandler mh = (EncodingHandler) accum.getHandler();
             ThresholdAlgorithm taAveraged = mh.getAverageThresholdAlgorithm();
 
